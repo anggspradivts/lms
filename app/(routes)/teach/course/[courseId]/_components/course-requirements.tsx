@@ -1,5 +1,7 @@
 import { Course } from "@prisma/client";
 import TitleFormPage from "./title-form";
+import DescriptionForm from "./description-form";
+import UploadImageForm from "./uploadimage-form";
 
 interface CourseRquirementsProps {
   initialData: Course;
@@ -12,7 +14,8 @@ const CourseRequirements = ({
   return (
     <div className="grid md:grid-cols-2 gap-5">
       <TitleFormPage initialData={initialData} userId={userId} />
-      <TitleFormPage initialData={initialData} userId={userId} />
+      <DescriptionForm initialData={initialData} userId={userId}/>
+      <UploadImageForm initialData={initialData} userId={userId} />
     </div>
   );
 };

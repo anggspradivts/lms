@@ -18,26 +18,26 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
-  title: z.string().min(1, {
-    message: "Title is required",
+  description: z.string().min(1, {
+    message: "Description is required",
   }),
 });
 
-interface TitleFormPageProps {
+interface DescriptionFormProps {
   initialData: Course;
   userId: string;
 }
-const TitleFormPage = ({ initialData, userId }: TitleFormPageProps) => {
+const DescriptionForm = ({ initialData, userId }: DescriptionFormProps) => {
   const [isEditing, setIsEditting] = useState(false);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: initialData?.title || "",
+      description: initialData?.description || "",
     },
   });
 
@@ -59,7 +59,7 @@ const TitleFormPage = ({ initialData, userId }: TitleFormPageProps) => {
   return (
     <div className="bg-slate-100 rounded-md p-2">
       <div className="flex justify-between items-center ">
-        <h1 className="text-xl">Course title</h1>
+        <h1 className="text-xl">Course description</h1>
         {!isEditing && (
           <Button
             variant="ghost"
@@ -81,22 +81,24 @@ const TitleFormPage = ({ initialData, userId }: TitleFormPageProps) => {
       <div>
         {!isEditing ? (
           <>
-            <p className="mb-14 text-gray-600">{initialData.title}</p>
-            <p className="text-xs text-gray-600">Title is required</p>
+            <p className="mb-14 text-gray-600">
+              {initialData.description || "No Description"}
+            </p>
+            <p className="text-xs text-gray-600">Your course description</p>
           </>
         ) : (
           <Form {...form}>
             <form className="mt-2" onSubmit={form.handleSubmit(onSubmit)}>
               <FormField
                 control={form.control}
-                name="title"
+                name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Course Title</FormLabel>
+                    <FormLabel>Course description</FormLabel>
                     <FormControl>
-                      <Input
+                      <Textarea
                         disabled={isSubmitting}
-                        placeholder="e.g 'advanced web development'"
+                        placeholder="description about your course..."
                         {...field}
                       />
                     </FormControl>
@@ -121,4 +123,4 @@ const TitleFormPage = ({ initialData, userId }: TitleFormPageProps) => {
   );
 };
 
-export default TitleFormPage;
+export default DescriptionForm;
