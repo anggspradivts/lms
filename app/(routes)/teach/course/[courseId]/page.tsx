@@ -16,8 +16,6 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
     },
   });
 
-  console.log(course);
-
   if (!course) {
     return redirect("/");
   }
@@ -40,7 +38,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
         <p>Completed {`(${completedFields}/${totalFields})`} </p>
       </div>
       <div className="col-span-3">
-        <h1 className="text-2xl">Course Requirements</h1>
+        <h1 className="text-2xl mb-5">Course Requirements</h1>
         <CourseRequirements initialData={course} userId={userId} />
       </div>
     </div>

@@ -45,7 +45,6 @@ const TitleFormPage = ({ initialData, userId }: TitleFormPageProps) => {
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (value: z.infer<typeof formSchema>) => {
-    console.log(value)
     try {
       const response = await axios.patch(
         `/api/courses/${initialData.id}`,
