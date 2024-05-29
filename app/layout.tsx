@@ -15,11 +15,9 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body>
-          <main>
-            <Navbar />
-            {children}
-            <Footer />
-          </main>
+          <Navbar />
+          <main className="p-4">{children}</main>
+          <Footer />
         </body>
       </html>
     </ClerkProvider>

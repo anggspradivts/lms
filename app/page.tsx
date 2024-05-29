@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <div>
       <UserButton />
-      This is protected page
+      This is ubprotected page
     </div>
   );
 }

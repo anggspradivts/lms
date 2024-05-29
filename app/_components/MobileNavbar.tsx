@@ -1,3 +1,4 @@
+import NavbarRoutes from "@/components/navbar-routes";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 
@@ -14,7 +15,7 @@ const MobileNavbar = () => {
               <h1 className="text-1xl font-bold">Angga Web Course</h1>
             </div>
             <div className="flex flex-col w-full">
-              
+              <NavbarRoutes />
             </div>
           </div>
         </SheetContent>
