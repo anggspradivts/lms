@@ -12,6 +12,7 @@ import { ImageIcon, Pencil, PlusCircle } from "lucide-react";
 
 import { FileUpload } from "@/components/file-upload";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   imageUrl: z.string().min(1, {
@@ -50,7 +51,9 @@ const UploadImageForm = ({ initialData, userId }: UploadImageFormProps) => {
   };
 
   return (
-    <div className="bg-slate-100 rounded-md p-2">
+    <div
+      className={cn("bg-slate-100 rounded-md p-2", isEditing && "bg-slate-200")}
+    >
       <div className="flex justify-between items-center ">
         <h1 className="text-xl">Course Image</h1>
         {!isEditing && !initialData.imageUrl && (
@@ -68,7 +71,7 @@ const UploadImageForm = ({ initialData, userId }: UploadImageFormProps) => {
             onClick={() => setIsEditting((prev) => !prev)}
           >
             <Pencil className="h-4 w-4 mr-2" />
-            Edit Image
+            Edit
           </Button>
         )}
         {isEditing && (
@@ -83,11 +86,9 @@ const UploadImageForm = ({ initialData, userId }: UploadImageFormProps) => {
       <div>
         {!isEditing ? (
           !initialData.imageUrl ? (
-            <>
-              <div className="flex items-center justify-center h-60 bg-slate-300 rounded-md">
-                <ImageIcon className="h-10 w-10 text-slate-500" />
-              </div>
-            </>
+            <div className="flex items-center justify-center h-60 bg-slate-300 rounded-md">
+              <ImageIcon className="h-10 w-10 text-slate-500" />
+            </div>
           ) : (
             <div className="relative aspect-video mt-2">
               <Image

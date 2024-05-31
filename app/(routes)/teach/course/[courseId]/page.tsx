@@ -2,6 +2,8 @@ import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import CourseRequirements from "./_components/course-requirements";
+import { Carme } from "next/font/google";
+import { Button } from "@/components/ui/button";
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const { userId } = auth();
@@ -13,6 +15,12 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const course = await db.course.findUnique({
     where: {
       id: params.courseId,
+    },
+  });
+
+  const categories = await db.category.findMany({
+    orderBy: {
+      name: "asc",
     },
   });
 
@@ -38,8 +46,17 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
         <p>Completed {`(${completedFields}/${totalFields})`} </p>
       </div>
       <div className="col-span-3">
-        <h1 className="text-2xl mb-5">Course Requirements</h1>
-        <CourseRequirements initialData={course} userId={userId} />
+        <div className="flex justify-between ">
+          <h1 className="text-2xl mb-5">Course Requirements</h1>
+          <Button variant="ghost">
+            Publish
+          </Button>
+        </div>
+        <CourseRequirements
+          initialData={course}
+          userId={userId}
+          categories={categories}
+        />
       </div>
     </div>
   );

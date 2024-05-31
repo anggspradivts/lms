@@ -9,6 +9,7 @@ import { Course } from "@prisma/client";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 import {
   Form,
@@ -57,7 +58,9 @@ const DescriptionForm = ({ initialData, userId }: DescriptionFormProps) => {
   };
 
   return (
-    <div className="bg-slate-100 rounded-md p-2">
+    <div
+      className={cn("bg-slate-100 rounded-md p-2", isEditing && "bg-slate-200")}
+    >
       <div className="flex justify-between items-center ">
         <h1 className="text-xl">Course description</h1>
         {!isEditing && (
