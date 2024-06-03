@@ -84,10 +84,9 @@ const DescriptionForm = ({ initialData, userId }: DescriptionFormProps) => {
       <div>
         {!isEditing ? (
           <>
-            <p className="mb-14 text-gray-600">
+            <p className="text-sm text-slate-500">
               {initialData.description || "No Description"}
             </p>
-            <p className="text-xs text-gray-600">Your course description</p>
           </>
         ) : (
           <Form {...form}>

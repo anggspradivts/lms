@@ -4,15 +4,15 @@ import { NextResponse } from "next/server";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { coursesId: string } }
+  { params }: { params: { courseId: string } }
 ) {
   const value = await req.json();
   const { userId } = auth();
-  const { coursesId } = params;
+  const { courseId } = params;
   
   const course = await db.course.update({
     where: {
-      id: coursesId,
+      id: courseId,
     },
     data: value
   })

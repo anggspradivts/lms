@@ -68,7 +68,7 @@ export const CategoryForm = ({
       className={cn("bg-slate-100 rounded-md p-2", isEditing && "bg-slate-200")}
     >
       <div className="flex justify-between items-center ">
-        <h1 className="text-xl">Course Category</h1>
+        <h1 className="text-xl">Course category</h1>
         {!isEditing && (
           <Button
             variant="ghost"
@@ -92,8 +92,8 @@ export const CategoryForm = ({
           <>
             <p
               className={cn(
-                "text-xs mb-14 text-slate-500",
-                !initialData.categoryId && "text-slate 500 italic"
+                "text-sm text-slate-500",
+                !initialData.categoryId && "text-sm text-slate-500 italic"
               )}
             >
               {selectedOption?.label || "No category"}
@@ -118,7 +118,7 @@ export const CategoryForm = ({
                   </FormItem>
                 )}
               />
-              <div className="flex justify-end mt-2">
+              <div className="flex justify-end mt-2 bottom-0">
                 <Button
                   variant="outline"
                   type="submit"

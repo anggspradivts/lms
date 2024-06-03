@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { Course } from "@prisma/client";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Pencil } from "lucide-react";
+import { DollarSign, Pencil } from "lucide-react";
 
 import {
   Form,
@@ -20,25 +20,24 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { formPrice } from "@/lib/format";
 
 const formSchema = z.object({
-  title: z.string().min(1, {
-    message: "Title is required",
-  })
+  price: z.coerce.number(),
 });
 
-interface TitleFormPageProps {
+interface PriceFormPageProps {
   initialData: Course;
   userId: string;
 }
-const TitleFormPage = ({ initialData, userId }: TitleFormPageProps) => {
+const PriceFormPage = ({ initialData, userId }: PriceFormPageProps) => {
   const [isEditing, setIsEditting] = useState(false);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: initialData?.title || "",
+      price: initialData?.price || undefined,
     },
   });
 
@@ -62,14 +61,17 @@ const TitleFormPage = ({ initialData, userId }: TitleFormPageProps) => {
       className={cn("bg-slate-100 rounded-md p-2", isEditing && "bg-slate-200")}
     >
       <div className="flex justify-between items-center ">
-        <h1 className="text-xl">Course title</h1>
+        <div className="flex items-center gap-2">
+          <DollarSign className="w-4 h-4" />
+          <h1 className="text-xl">Set a price</h1>
+        </div>
         {!isEditing && (
           <Button
             variant="ghost"
             onClick={() => setIsEditting((prev) => !prev)}
           >
             <Pencil className="h-4 w-4 mr-2" />
-            Edit
+            Edit price
           </Button>
         )}
         {isEditing && (
@@ -83,22 +85,24 @@ const TitleFormPage = ({ initialData, userId }: TitleFormPageProps) => {
       </div>
       <div>
         {!isEditing ? (
-          <>
-            <p className="text-sm text-slate-500">{initialData.title}</p>
-          </>
+          <p className="text-sm text-slate-500 italic">
+            {initialData.price ? formPrice(initialData.price) : "No price set..."}
+          </p>
         ) : (
           <Form {...form}>
             <form className="mt-2" onSubmit={form.handleSubmit(onSubmit)}>
               <FormField
                 control={form.control}
-                name="title"
+                name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Course Title</FormLabel>
+                    <FormLabel>Course price</FormLabel>
                     <FormControl>
                       <Input
+                        type="number"
+                        step="0.01"
                         disabled={isSubmitting}
-                        placeholder="e.g 'advanced web development'"
+                        placeholder="set a price for your course..."
                         {...field}
                       />
                     </FormControl>
@@ -123,4 +127,4 @@ const TitleFormPage = ({ initialData, userId }: TitleFormPageProps) => {
   );
 };
 
-export default TitleFormPage;
+export default PriceFormPage;
