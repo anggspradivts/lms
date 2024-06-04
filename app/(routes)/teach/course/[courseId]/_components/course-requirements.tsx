@@ -1,4 +1,4 @@
-import { Attachment, Category, Course } from "@prisma/client";
+import { Attachment, Category, Chapter, Course } from "@prisma/client";
 import TitleFormPage from "./title-form";
 import DescriptionForm from "./description-form";
 import UploadImageForm from "./uploadimage-form";
@@ -8,7 +8,7 @@ import ChapterForm from "./chapter-form";
 import AttachmentForm from "./attachment-form";
 
 interface CourseRquirementsProps {
-  initialData: Course & { attachments: Attachment[] };
+  initialData: Course & { attachments: Attachment[], chapters: Chapter[] };
   userId: string;
   categories: { id: string; name: string }[];
 }

@@ -13,12 +13,10 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
     return redirect("/");
   }
 
-  interface CourseProps {
-    course: Course & { attachment: Attachment[] }
-  }
   const course = await db.course.findUnique({
     where: {
       id: params.courseId,
+      userId,
     },
     include: {
       attachments: {
@@ -26,6 +24,16 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
           createdAt: "desc",
         },
       },
+      chaptersFolders: {
+        orderBy: {
+          id: "asc"
+        }
+      },
+      chapters: {
+        orderBy: {
+          position: "asc"
+        }
+      }
     },
   });
 
@@ -45,6 +53,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
     course.price,
     course.imageUrl,
     course.categoryId,
+    course.chapters.some((chapter) => chapter.isPublished)
   ];
 
   const totalFields = requiredFields.length;
