@@ -40,4 +40,3 @@ export async function POST(
     return new NextResponse("Internal server error", { status: 500 })
   }
 }
-

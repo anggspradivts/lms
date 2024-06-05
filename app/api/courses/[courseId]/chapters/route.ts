@@ -9,7 +9,7 @@ export async function POST(
   try {
     const { userId } = auth();
     const { courseId } = params;
-    const { title, url } = await req.json()
+    const { title, videoUrl, creationState, chapterFolderId } = await req.json()
   
     if (!userId) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
@@ -28,28 +28,53 @@ export async function POST(
       return NextResponse.json({ message: "You're not the owner of this course." }, { status: 401 })
     }
 
-    console.log("url", url, title)
 
-    // const lastChapter = await db.chapter.findFirst({
-    //   where: {
-    //     courseId: courseId,
-    //   },
-    //   orderBy: {
-    //     position: "desc"
-    //   }
-    // })
+    if (creationState === "chapter") {//make chapter
+      const lastChapter = await db.chapter.findFirst({
+        where: {
+          courseId: courseId,
+        },
+        orderBy: {
+          position: "desc"
+        }
+      })
 
-    // const newPosition = lastChapter ? lastChapter.position + 1 : 1;
-  
-    // const chapter = await db.chapter.create({
-    //   data: {
-    //     courseId: courseId,
-    //     title: title,
-    //     position: newPosition
-    //   }
-    // })
+      const newPosition = lastChapter ? lastChapter.position + 1 : 1;
 
-    // return NextResponse.json(chapter)
+      const chapter = await db.chapter.create({
+        data: {
+          courseId: courseId,
+          title: title,
+          videoUrl: videoUrl,
+          position: newPosition,
+          chapterFolderId: chapterFolderId
+        }
+      })
+      return NextResponse.json(chapter)
+    } else if (creationState === "folder") {//make folder
+      const lastFolder = await db.chapterFolder.findFirst({
+        where: {
+          courseId: courseId,
+        },
+        orderBy: {
+          position: "desc"
+        }
+      })
+
+      const lastFolderPosition = lastFolder ? lastFolder.position + 1 : 1;
+
+      const folder = await db.chapterFolder.create({
+        data: {
+          courseId: courseId,
+          title: title,
+          position: lastFolderPosition
+        }
+      })
+
+    return NextResponse.json(folder)
+    } else {
+      return NextResponse.json({ message: "No creation state was passed from the client" }, { status: 500 })
+    }
   } catch (error) {
     console.log("[INTERNAL_SERVER_ERR]", error)
   }

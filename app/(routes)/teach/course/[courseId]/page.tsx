@@ -26,7 +26,14 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
       },
       chaptersFolders: {
         orderBy: {
-          id: "asc"
+          position: "asc"
+        },
+        include: {
+          chapters: {
+            orderBy: {
+              position: "asc"
+            }
+          }
         }
       },
       chapters: {
