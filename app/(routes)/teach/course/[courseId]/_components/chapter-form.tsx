@@ -16,7 +16,9 @@ import { deleteFile } from "@/components/file-delete";
 import {
   ChevronDown,
   ChevronRight,
+  CirclePlay,
   Folder,
+  MonitorPlay,
   Plus,
   PlusCircle,
   Trash2,
@@ -27,7 +29,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
@@ -45,6 +46,11 @@ const ChapterForm = ({ initialData, userId }: ChapterFormProps) => {
   const [videoUrl, setVideoUrl] = useState("");
   const [isChapterShow, setIsChapterShow] = useState<string | null>(null);
   const router = useRouter();
+
+  //filter chapter based on chapterFolderId
+  const chapterOnChapterFolderId = initialData.chapters.filter(
+    (chap) => chap.chapterFolderId === isChapterShow
+  );
 
   const formSchemaA = z.object({
     videoUrl: z.string().min(1),
@@ -91,6 +97,14 @@ const ChapterForm = ({ initialData, userId }: ChapterFormProps) => {
       toast.error("Something went wrong...");
     }
   };
+
+  const onDelete = (chapterId: string) => {
+    try {
+      console.log(chapterId)
+    } catch (error) {
+      toast.error("Something went wrong...")
+    }
+  }
 
   const handleCreate = (create: string) => {
     setIsCreating((prev) => !prev);
@@ -190,7 +204,7 @@ const ChapterForm = ({ initialData, userId }: ChapterFormProps) => {
                     render={({ field }) => (
                       <FormItem>
                         <FileUpload
-                          endpoint="courseAttachment"
+                          endpoint="chapterVideo"
                           onChange={(videoUrl) => {
                             if (videoUrl) {
                               setVideoUrl(videoUrl);
@@ -203,10 +217,12 @@ const ChapterForm = ({ initialData, userId }: ChapterFormProps) => {
                     )}
                   />
                 </div>
-                <div className={cn(
-                  "flex items-center text-sm p-2 bg-slate-300 rounded-md shadow-sm",
-                  !videoUrl && "italic"
-                )}>
+                <div
+                  className={cn(
+                    "flex items-center text-sm p-2 bg-slate-300 rounded-md shadow-sm",
+                    !videoUrl && "italic"
+                  )}
+                >
                   <p>
                     {videoUrl
                       ? videoUrl.slice(0, 50) + "..."
@@ -280,7 +296,7 @@ const ChapterForm = ({ initialData, userId }: ChapterFormProps) => {
               {initialData.chaptersFolders.map((cf) => {
                 return (
                   <div key={cf.id}>
-                    <div className="bg-slate-200 p-1 rounded-md">
+                    <div className="bg-slate-200 p-1 rounded-md hover:shadow-md">
                       <button
                         onClick={() => setIsChapterShow(cf.id)}
                         className="w-full"
@@ -299,15 +315,31 @@ const ChapterForm = ({ initialData, userId }: ChapterFormProps) => {
                       {isChapterShow === cf.id && (
                         <div className="flex items-center ml-4 pl-2 pt-2  border-l-2 border-slate-300">
                           <div className="space-y-2">
-                            {initialData.chaptersFolders.chapters?.length >
-                            0 ? (
-                              initialData.chaptersFolders.chapters.map(
-                                (chapter) => (
-                                  <div key={chapter.id}>{chapter.title}</div>
-                                )
+                            {initialData.chapters?.length > 0 ? (
+                              chapterOnChapterFolderId.length > 0 ? (
+                                <>
+                                  {chapterOnChapterFolderId.map((chapter) => (
+                                    <div
+                                      className="flex items-center space-x-2 w-full ml-1"
+                                      key={chapter.id}
+                                    >
+                                      <p>{chapter.position}.</p>
+                                      <CirclePlay className="w-4 h-4" />
+                                      <p>{chapter.title}</p>
+                                      <button onClick={() => onDelete(chapter.id)} className="ml-10">
+                                        <Trash2 className="w-4 h-4" />
+                                      </button>
+                                    </div>
+                                  ))}
+                                </>
+                              ) : (
+                                //if no chapter on the current folder
+                                <div className="ml-1 italic">
+                                  No chapter yet in <span className="font-bold">{cf.title}</span> folder...
+                                </div>
                               )
                             ) : (
-                              <div className="ml-1">
+                              <div className="ml-1 italic">
                                 No chapters available yet in this folder...
                               </div>
                             )}
@@ -333,7 +365,7 @@ const ChapterForm = ({ initialData, userId }: ChapterFormProps) => {
             <div>No folder yet...</div>
           )}
 
-          {initialData.chapters.length > 0 ? (
+          {/* {initialData.chapters.length > 0 ? (
             <div className="space-y-2">
               {initialData.chapters.map((chapter) => (
                 <div key={chapter.id} className="bg-slate-200 p-1 rounded-md">
@@ -345,7 +377,7 @@ const ChapterForm = ({ initialData, userId }: ChapterFormProps) => {
             <div>
               <p>{null}</p>
             </div>
-          )}
+          )} */}
         </div>
       )}
     </div>

@@ -9,7 +9,7 @@ export async function POST(
   try {
     const { userId } = auth();
     const { courseId } = params;
-    const { title, videoUrl, creationState, chapterFolderId } = await req.json()
+    const { title, videoUrl, creationState, chapterFolderId, description } = await req.json()
   
     if (!userId) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
@@ -46,6 +46,7 @@ export async function POST(
           courseId: courseId,
           title: title,
           videoUrl: videoUrl,
+          description: description,
           position: newPosition,
           chapterFolderId: chapterFolderId
         }
@@ -75,6 +76,32 @@ export async function POST(
     } else {
       return NextResponse.json({ message: "No creation state was passed from the client" }, { status: 500 })
     }
+  } catch (error) {
+    console.log("[INTERNAL_SERVER_ERR]", error)
+  }
+}
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: { courseId: string } }
+) {
+  try {
+    const { userId } = auth();
+    const { courseId } = params;
+
+    if (!userId) return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+    
+    const courseOwner = await db.course.findUnique({
+      where: {
+        id: courseId,
+        userId: userId
+      }
+    })
+
+    if (!courseOwner) return NextResponse.json({ message: "You're not the owner of this course." }, { status: 401 });
+
+    
+    
   } catch (error) {
     console.log("[INTERNAL_SERVER_ERR]", error)
   }
