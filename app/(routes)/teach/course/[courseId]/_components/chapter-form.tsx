@@ -30,6 +30,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
 
 interface ChapterFormProps {
   initialData: Course & {
@@ -41,16 +42,14 @@ interface ChapterFormProps {
 const ChapterForm = ({ initialData, userId }: ChapterFormProps) => {
   const [isCreating, setIsCreating] = useState(false);
   const [creationState, setCreationState] = useState("");
-  const [isUrl, setIsUrl] = useState("");
+  const [videoUrl, setVideoUrl] = useState("");
   const [isChapterShow, setIsChapterShow] = useState<string | null>(null);
   const router = useRouter();
-
-  const p = initialData.chaptersFolders.chapters;
-  console.log(typeof p);
 
   const formSchemaA = z.object({
     videoUrl: z.string().min(1),
     title: z.string().min(1),
+    description: z.string().min(1),
     creationState: z.string(),
     chapterFolderId: z.string().min(1),
   });
@@ -64,8 +63,9 @@ const ChapterForm = ({ initialData, userId }: ChapterFormProps) => {
     defaultValues: {
       title: "",
       videoUrl: "",
-      creationState: "chapter",
+      description: "",
       chapterFolderId: "",
+      creationState: "chapter",
     },
   });
   const formFolder = useForm<z.infer<typeof formSchemaB>>({
@@ -99,7 +99,7 @@ const ChapterForm = ({ initialData, userId }: ChapterFormProps) => {
 
   const handleFileDelete = (url: string) => {
     deleteFile(url);
-    setIsUrl("");
+    setVideoUrl("");
   };
 
   return (
@@ -134,6 +134,8 @@ const ChapterForm = ({ initialData, userId }: ChapterFormProps) => {
           </Button>
         )}
       </div>
+
+      {/* make chapter sec */}
       {isCreating ? (
         <>
           {creationState === "chapter" && (
@@ -142,50 +144,77 @@ const ChapterForm = ({ initialData, userId }: ChapterFormProps) => {
                 className="mt-2"
                 onSubmit={formChapter.handleSubmit(onSubmit)}
               >
-                <FormLabel>Chapter Title</FormLabel>
-                <FormField
-                  control={formChapter.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          disabled={formChapter.formState.isSubmitting}
-                          placeholder="e.g 'Introduction to the course'"
-                          {...field}
+                <div className="mb-3 space-y-2">
+                  <p>Chapter Title</p>
+                  <FormField
+                    control={formChapter.control}
+                    name="title"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            disabled={formChapter.formState.isSubmitting}
+                            placeholder="e.g 'Introduction to the course'"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="mb-3 space-y-2">
+                  <p>Chapter description</p>
+                  <FormField
+                    control={formChapter.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Textarea
+                            disabled={formChapter.formState.isSubmitting}
+                            placeholder="e.g 'What will you learn from the course'"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="mb-2">
+                  <p>Chapter video</p>
+                  <FormField
+                    control={formChapter.control}
+                    name="videoUrl"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FileUpload
+                          endpoint="courseAttachment"
+                          onChange={(videoUrl) => {
+                            if (videoUrl) {
+                              setVideoUrl(videoUrl);
+                              formChapter.setValue("videoUrl", videoUrl);
+                            }
+                          }}
                         />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={formChapter.control}
-                  name="videoUrl"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FileUpload
-                        endpoint="courseAttachment"
-                        onChange={(videoUrl) => {
-                          if (videoUrl) {
-                            setIsUrl(videoUrl);
-                            formChapter.setValue("videoUrl", videoUrl);
-                          }
-                        }}
-                      />
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <div className="flex items-center text-sm">
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className={cn(
+                  "flex items-center text-sm p-2 bg-slate-300 rounded-md shadow-sm",
+                  !videoUrl && "italic"
+                )}>
                   <p>
-                    {isUrl
-                      ? isUrl.slice(0, 50) + "..."
-                      : "No video uploaded..."}
+                    {videoUrl
+                      ? videoUrl.slice(0, 50) + "..."
+                      : "No video was uploaded..."}
                   </p>
-                  {isUrl && (
+                  {videoUrl && (
                     <Trash2
-                      onClick={() => handleFileDelete(isUrl)}
+                      onClick={() => handleFileDelete(videoUrl)}
                       className="ml-auto w-4 h-4"
                     />
                   )}
@@ -202,6 +231,8 @@ const ChapterForm = ({ initialData, userId }: ChapterFormProps) => {
               </form>
             </Form>
           )}
+
+          {/* make folder sec */}
           {creationState === "folder" && (
             <Form {...formFolder}>
               <form
@@ -266,8 +297,8 @@ const ChapterForm = ({ initialData, userId }: ChapterFormProps) => {
                     </div>
                     <div>
                       {isChapterShow === cf.id && (
-                        <div className="flex items-center ml-4 pl-2 pt-1  border-l-2 border-slate-300">
-                          <div className="space-y-1">
+                        <div className="flex items-center ml-4 pl-2 pt-2  border-l-2 border-slate-300">
+                          <div className="space-y-2">
                             {initialData.chaptersFolders.chapters?.length >
                             0 ? (
                               initialData.chaptersFolders.chapters.map(
@@ -282,14 +313,13 @@ const ChapterForm = ({ initialData, userId }: ChapterFormProps) => {
                             )}
                             <button
                               onClick={() => {
-                                  formChapter.setValue("chapterFolderId", cf.id)
-                                  handleCreate("chapter")
-                                }
-                              }
-                              className="flex items-center space-x-2 hover:text-sky-500"
+                                formChapter.setValue("chapterFolderId", cf.id);
+                                handleCreate("chapter");
+                              }}
+                              className="flex items-center space-x-1 hover:text-sky-500"
                             >
                               <Plus className="w-4 h-4" />
-                              Add chapter to {cf.title}
+                              <p>Add chapter to {cf.title}</p>
                             </button>
                           </div>
                         </div>
@@ -313,7 +343,7 @@ const ChapterForm = ({ initialData, userId }: ChapterFormProps) => {
             </div>
           ) : (
             <div>
-              <p>{null}.</p>
+              <p>{null}</p>
             </div>
           )}
         </div>

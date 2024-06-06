@@ -28,8 +28,8 @@ export async function POST(
       return NextResponse.json({ message: "You're not the owner of this course." }, { status: 401 })
     }
 
-
-    if (creationState === "chapter") {//make chapter
+    //check if the creation state is folder or chapter
+    if (creationState === "chapter") {
       const lastChapter = await db.chapter.findFirst({
         where: {
           courseId: courseId,
