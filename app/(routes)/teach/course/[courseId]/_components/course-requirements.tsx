@@ -1,4 +1,10 @@
-import { Attachment, Category, Chapter, Course } from "@prisma/client";
+import {
+  Attachment,
+  Category,
+  Chapter,
+  ChapterFolder,
+  Course,
+} from "@prisma/client";
 import TitleFormPage from "./title-form";
 import DescriptionForm from "./description-form";
 import UploadImageForm from "./uploadimage-form";
@@ -8,14 +14,20 @@ import ChapterForm from "./chapter-form";
 import AttachmentForm from "./attachment-form";
 
 interface CourseRquirementsProps {
-  initialData: Course & { attachments: Attachment[], chapters: Chapter[] };
+  initialData: Course & {
+    attachments: Attachment[];
+    chapters: Chapter[];
+    chaptersFolders: ChapterFolder[];
+  };
   userId: string;
   categories: { id: string; name: string }[];
+  params: { courseId: string }
 }
 const CourseRequirements = ({
   initialData,
   userId,
   categories,
+  params,
 }: CourseRquirementsProps) => {
   //Map over each categories value (id, name), and save it inside label and value
   const options = categories.map((category) => ({
@@ -36,7 +48,7 @@ const CourseRequirements = ({
         />
       </div>
       <div className="second-sec flex flex-col gap-5">
-        <ChapterForm initialData={initialData} userId={userId} />
+        <ChapterForm initialData={initialData} userId={userId} params={params}/>
         <AttachmentForm initialData={initialData} userId={userId} />
         <PriceForm initialData={initialData} userId={userId} />
       </div>

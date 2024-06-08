@@ -1,8 +1,6 @@
 "use client";
 import { UserButton } from "@clerk/nextjs";
 import {
-  Book,
-  BookIcon,
   LogOutIcon,
   SearchIcon,
   ShoppingCart,
@@ -17,7 +15,7 @@ const NavbarRoutes = () => {
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row gap-5 items-center">
+      <div className="flex flex-col md:flex-row gap-5 md:items-center space-y-5 md:space-y-0">
         <h1 className="hidden md:block text-xl text-sky-700">
           <Link href="/">Angga Web Course</Link>
         </h1>
@@ -30,18 +28,16 @@ const NavbarRoutes = () => {
             <ShoppingCart className="h-5 w-5" />
           </>
         ) : (
-          <>
-            <Link className="flex justify-center items-center gap-1" href="/">
-              <LogOutIcon className="h-4 w-4" />
-              <p>Back</p>
-            </Link>
-            <h1 className="text-sky-700">Teach Mode</h1>
-            <BookIcon className="text-sky-700" />
-          </>
+          <Link className="flex md:justify-center items-center gap-1" href="/">
+            <LogOutIcon className="h-4 w-4" />
+            <p>
+              Quit <span className="">teach mode</span>
+            </p>
+          </Link>
         )}
-        <div className="ml-auto flex gap-5">
+        <div className="flex md:ml-auto gap-5">
           <UserButton />
-          <div className="flex">
+          <div className="hidden md:block ">
             <Input className="rounded-xl pl-10 w-60" />
             <SearchIcon className="absolute top-6 ml-2" />
           </div>

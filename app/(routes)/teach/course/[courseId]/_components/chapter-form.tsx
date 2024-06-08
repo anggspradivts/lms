@@ -4,7 +4,7 @@ import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Chapter, ChapterFolder, Course } from "@prisma/client";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,7 @@ import {
   ChevronRight,
   CirclePlay,
   Folder,
-  MonitorPlay,
+  Pencil,
   Plus,
   PlusCircle,
   Trash2,
@@ -32,20 +32,24 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
+import Link from "next/link";
 
 interface ChapterFormProps {
   initialData: Course & {
     chapters: Chapter[];
-    chaptersFolders: ChapterFolder[] & { chapters: Chapter[] };
+    chaptersFolders: ChapterFolder[];
   };
   userId: string;
+  params: { courseId: string };
 }
-const ChapterForm = ({ initialData, userId }: ChapterFormProps) => {
+const ChapterForm = ({ initialData, userId, params }: ChapterFormProps) => {
   const [isCreating, setIsCreating] = useState(false);
   const [creationState, setCreationState] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
   const [isChapterShow, setIsChapterShow] = useState<string | null>(null);
+
   const router = useRouter();
+  const { courseId } = useParams();
 
   //filter chapter based on chapterFolderId
   const chapterOnChapterFolderId = initialData.chapters.filter(
@@ -55,7 +59,7 @@ const ChapterForm = ({ initialData, userId }: ChapterFormProps) => {
   const formSchemaA = z.object({
     videoUrl: z.string().min(1),
     title: z.string().min(1),
-    description: z.string().min(1),
+    description: z.string(),
     creationState: z.string(),
     chapterFolderId: z.string().min(1),
   });
@@ -100,11 +104,11 @@ const ChapterForm = ({ initialData, userId }: ChapterFormProps) => {
 
   const onDelete = (chapterId: string) => {
     try {
-      console.log(chapterId)
+      console.log(chapterId);
     } catch (error) {
-      toast.error("Something went wrong...")
+      toast.error("Something went wrong...");
     }
-  }
+  };
 
   const handleCreate = (create: string) => {
     setIsCreating((prev) => !prev);
@@ -178,7 +182,7 @@ const ChapterForm = ({ initialData, userId }: ChapterFormProps) => {
                   />
                 </div>
                 <div className="mb-3 space-y-2">
-                  <p>Chapter description</p>
+                  <p>Chapter description <span className="text-sm text-slate-500">{"(optional)"}</span></p>
                   <FormField
                     control={formChapter.control}
                     name="description"
@@ -296,7 +300,12 @@ const ChapterForm = ({ initialData, userId }: ChapterFormProps) => {
               {initialData.chaptersFolders.map((cf) => {
                 return (
                   <div key={cf.id}>
-                    <div className="bg-slate-200 p-1 rounded-md hover:shadow-md">
+                    <div
+                      className={cn(
+                        "bg-slate-200 p-1 rounded-md",
+                        isChapterShow === cf.id && "shadow-md"
+                      )}
+                    >
                       <button
                         onClick={() => setIsChapterShow(cf.id)}
                         className="w-full"
@@ -317,25 +326,27 @@ const ChapterForm = ({ initialData, userId }: ChapterFormProps) => {
                           <div className="space-y-2">
                             {initialData.chapters?.length > 0 ? (
                               chapterOnChapterFolderId.length > 0 ? (
-                                <>
-                                  {chapterOnChapterFolderId.map((chapter) => (
+                                chapterOnChapterFolderId.map((chapter) => (
+                                  <Link
+                                    href={`/teach/course/${params.courseId}/chapters/${chapter.id}`}
+                                  >
                                     <div
-                                      className="flex items-center space-x-2 w-full ml-1"
                                       key={chapter.id}
+                                      className="flex w-full items-center space-x-2 w-full ml-1"
                                     >
                                       <p>{chapter.position}.</p>
                                       <CirclePlay className="w-4 h-4" />
-                                      <p>{chapter.title}</p>
-                                      <button onClick={() => onDelete(chapter.id)} className="ml-10">
-                                        <Trash2 className="w-4 h-4" />
-                                      </button>
+                                      <p className="mr-20 font-semibold">
+                                        {chapter.title}
+                                      </p>
                                     </div>
-                                  ))}
-                                </>
+                                  </Link>
+                                ))
                               ) : (
-                                //if no chapter on the current folder
                                 <div className="ml-1 italic">
-                                  No chapter yet in <span className="font-bold">{cf.title}</span> folder...
+                                  No chapter yet in{" "}
+                                  <span className="font-bold">{cf.title}</span>{" "}
+                                  folder...
                                 </div>
                               )
                             ) : (

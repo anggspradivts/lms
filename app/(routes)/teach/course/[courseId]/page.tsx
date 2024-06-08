@@ -27,13 +27,6 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
       chaptersFolders: {
         orderBy: {
           position: "asc"
-        },
-        include: {
-          chapters: {
-            orderBy: {
-              position: "asc"
-            }
-          }
         }
       },
       chapters: {
@@ -85,6 +78,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
           initialData={course}
           userId={userId}
           categories={categories}
+          params={params}
         />
       </div>
     </div>

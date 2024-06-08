@@ -15,7 +15,7 @@ export async function PATCH(
       id: courseId,
     },
     data: value
-  })
+  });
 
   if(!userId) {
     throw new Error("Unauthorized");
