@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { useFormState } from "react-dom";
+import { Form, FormField, FormItem } from "@/components/ui/form";
 
 const formSchema = z.object({
   url: z.string().min(1),
@@ -26,8 +27,16 @@ interface AttachmentFormProps {
 }
 const AttachmentForm = ({ initialData, userId }: AttachmentFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [attachmentId, setAttachmentId] = useState("");
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      url: "",
+    },
+  });
 
   const onSubmit = async (value: z.infer<typeof formSchema>) => {
     try {
@@ -36,29 +45,26 @@ const AttachmentForm = ({ initialData, userId }: AttachmentFormProps) => {
         value
       );
       setIsEditing((prev) => !prev);
+      toast.success("Success adding attachments")
       router.refresh();
     } catch (error) {
       toast.error("Something went wrong...");
     }
   };
 
-  const onDelete = async (id: string) => {
+  const onDelete2 = async (id: string) => {
     try {
-      setIsDeleting(id);
       const response = await axios.delete(
-        `/api/courses/${initialData.id}/attachments/${id}`,
+        `/api/courses/${initialData.id}/attachments/${id}`
       );
-      toast.success("Attachment success deleted.")
+      toast.success("Attachment success deleted.");
+      router.refresh();
     } catch (error) {
       toast.error("Something went wrong...");
     } finally {
       setIsDeleting(null);
     }
   };
-
-  // const deleteAttachment = (attachmentId: string) => {
-  //   onDelete();
-  // };
 
   return (
     <div
@@ -111,12 +117,14 @@ const AttachmentForm = ({ initialData, userId }: AttachmentFormProps) => {
                           <Loader2 className="w-4 h-4 animate-spin" />
                         </div>
                       ) : (
-                        <button
-                          className="hover:opacity-75 transition"
-                          onClick={() => onDelete(attachment.id)}
-                        >
-                          <Trash2 className=" w-4 h-4" />
-                        </button>
+                        <div className="flex">
+                          <button onClick={() => {
+                            onDelete2(attachment.id);
+                            setIsDeleting(attachment.id)
+                          }}>
+                          <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
                       )}
                     </div>
                   );

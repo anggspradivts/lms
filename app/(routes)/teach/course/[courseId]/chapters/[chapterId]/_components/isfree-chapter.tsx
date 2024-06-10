@@ -86,7 +86,7 @@ const IsFreePage = ({ initialData, userId, courseId }: IsFreePageProps) => {
                         form.setValue("isFree", true);
                       }}
                     >
-                      <ToggleLeft className="w-10 h-10" />
+                      <ToggleLeft className="w-10 h-10 text-slate-700 hover:text-opacity-70" />
                     </Button>
                   )}
                   {initialData?.isFree && (
@@ -99,7 +99,7 @@ const IsFreePage = ({ initialData, userId, courseId }: IsFreePageProps) => {
                         form.setValue("isFree", false);
                       }}
                     >
-                      <ToggleRight className="w-10 h-10 text-sky-500" />
+                      <ToggleRight className="w-10 h-10 text-sky-500 hover:text-opacity-70" />
                     </Button>
                   )}
                   <FormMessage />

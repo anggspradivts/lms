@@ -1,5 +1,5 @@
 import { Chapter } from "@prisma/client";
-import { Trash2 } from "lucide-react";
+import { PlayCircle, PlayIcon, Trash2 } from "lucide-react";
 
 interface VideoChapterPageProps {
   initialData: Chapter | null;
@@ -15,9 +15,10 @@ const VideoChapterPage = ({ initialData, userId, courseId }: VideoChapterPagePro
             <source src={initialData?.videoUrl} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-          <div className="flex justify-between items-center">
+          <div className="flex items-center ">
+            <PlayCircle className="w-6 h-6 mr-2"/>
             <h1 className="text-xl">Chapter Video</h1>
-            <Trash2 className="w-4 h-4" />
+            <Trash2 className="ml-auto w-6 h-6" />
           </div>
         </div>
       ) : (

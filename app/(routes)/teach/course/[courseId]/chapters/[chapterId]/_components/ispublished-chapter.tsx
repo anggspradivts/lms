@@ -50,7 +50,7 @@ const IsPublishedPage = ({
   const onSubmit = async (value: z.infer<typeof formSchema>) => {
     try {
       const response = await axios.patch(
-        `/api/courses/${initialData?.id}`,
+        `/api/courses/${courseId}/chapters/${initialData?.id}`,
         value
       );
       setIsEditting((prev) => !prev);
@@ -64,7 +64,7 @@ const IsPublishedPage = ({
     <div
       className={cn(
         "bg-slate-100 rounded-md p-2",
-        isEditing && "bg-slate-200 shadow-inner"
+        // isEditing && "bg-slate-200 shadow-inner"
       )}
     >
       <div className="flex justify-between items-center ">
@@ -86,7 +86,7 @@ const IsPublishedPage = ({
                         form.setValue("isPublished", true);
                       }}
                     >
-                      <ToggleLeft className="w-10 h-10" />
+                      <ToggleLeft className="w-10 h-10 text-slate-700 hover:text-opacity-70" />
                     </Button>
                   )}
                   {initialData?.isPublished && (
@@ -99,7 +99,7 @@ const IsPublishedPage = ({
                         form.setValue("isPublished", false);
                       }}
                     >
-                      <ToggleRight className="w-10 h-10 text-sky-500" />
+                      <ToggleRight className="w-10 h-10 text-sky-500 hover:text-opacity-70" />
                     </Button>
                   )}
                   <FormMessage />
