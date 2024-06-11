@@ -2,14 +2,16 @@
 
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import CourseRequirements from "./_components/course-requirements";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/back-button";
 import { Attachment, Course } from "@prisma/client";
 import RequirementsHeader from "./_components/requirements-header";
+import CourseSidebar from "./_components/course-sidebar";
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
+  // const router = useRouter();
   const { userId } = auth();
 
   if (!userId) {
@@ -65,12 +67,11 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   return (
     <div className="grid md:grid-cols-4 gap-4">
       <div className="border-r border-gray md:col-span-1 w-full">
-        <h1 className="text-2xl">Complete Your Course</h1>
-        <div className="flex items-center text-slate-500 space-x-2 hover:text-black">
-          <BackButton />
-          <p className="">{course.title}</p>
-        </div>
-        <p>Completed {`(${completedFields}/${totalFields})`} </p>
+        <CourseSidebar
+          initialData={course}
+          completedFields={completedFields}
+          totalFields={totalFields}
+        />
       </div>
       <div className="col-span-3">
         <RequirementsHeader

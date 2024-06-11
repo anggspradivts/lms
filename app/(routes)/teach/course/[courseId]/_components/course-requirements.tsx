@@ -12,6 +12,7 @@ import { CategoryForm } from "./category-form";
 import PriceForm from "./price-form";
 import ChapterForm from "./chapter-form";
 import AttachmentForm from "./attachment-form";
+import DeleteFormPage from "./delete-form";
 
 interface CourseRquirementsProps {
   initialData: Course & {
@@ -51,6 +52,7 @@ const CourseRequirements = ({
         <ChapterForm initialData={initialData} userId={userId} params={params}/>
         <AttachmentForm initialData={initialData} userId={userId} />
         <PriceForm initialData={initialData} userId={userId} />
+        <DeleteFormPage initialData={initialData} userId={userId} />
       </div>
     </div>
   );

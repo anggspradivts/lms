@@ -34,9 +34,9 @@ const VideoChapterPage = ({
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    mode: "onChange",
     defaultValues: {
-      videoUrl: ""
+      videoUrl: "",
+      // currentVideoUrl: initialData?.videoUrl || ""
     }
   });
 

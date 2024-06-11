@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { utapi } from "@/lib/uplooadthing";
 import { auth } from "@clerk/nextjs/server"
 import { NextResponse } from "next/server";
 
@@ -9,7 +10,6 @@ export async function PATCH(
   try {
     const { userId } = auth();
     const value = await req.json()
-    console.log(value)
 
     if(!userId) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
@@ -22,10 +22,26 @@ export async function PATCH(
       }
     })
 
+    
     if (!courseOwner) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
     }
+      
+    //find chapter that want to be deleted
+    const findChapter = await db.chapter.findUnique({
+      where: {
+        id: params.chapterId,
+        courseId: params.courseId
+      }
+    });
 
+    //delete chapter video
+    if (findChapter?.videoUrl) {
+      await utapi.deleteFiles(`${findChapter.videoUrl}`);
+      console.log("deleted")
+    }
+
+    //update chapter
     const updateChapter = await db.chapter.update({
       where: {
         id: params.chapterId

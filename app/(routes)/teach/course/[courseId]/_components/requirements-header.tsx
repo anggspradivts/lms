@@ -40,7 +40,7 @@ const RequirementsHeader = ({
   };
 
   return (
-    <div className="flex justify-between ">
+    <div className="flex justify-between">
       <h1 className="text-2xl mb-5">
         Course Requirements
         <span className="text-xs ml-6 p-2 text-slate-500 bg-sky-100 rounded-xl">

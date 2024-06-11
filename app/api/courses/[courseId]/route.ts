@@ -37,3 +37,38 @@ export async function PATCH(
 
   return NextResponse.json(course)
 }
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: { courseId: string } }
+) {
+  try {
+    const { userId } = auth();
+    const { courseId } = params;
+
+    if (!userId) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+    }
+
+    const courseOwner = await db.course.findUnique({
+      where: {
+        id: courseId,
+        userId: userId
+      }
+    })
+
+    if (!courseOwner) {
+      return NextResponse.json({ message: "You're not the owner of this course" }, { status: 401 })
+    }
+
+    const deleteCourse = await db.course.delete({
+      where: {
+        id: courseOwner.id
+      }
+    })
+
+    return NextResponse.json(deleteCourse)
+  } catch (error) {
+    console.log("[DELETE_COURSE_ID]", error)
+  }
+}
