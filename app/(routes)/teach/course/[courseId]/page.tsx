@@ -1,3 +1,5 @@
+// "use client"
+
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
@@ -5,6 +7,7 @@ import CourseRequirements from "./_components/course-requirements";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/back-button";
 import { Attachment, Course } from "@prisma/client";
+import RequirementsHeader from "./_components/requirements-header";
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const { userId } = auth();
@@ -26,14 +29,14 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
       },
       chaptersFolders: {
         orderBy: {
-          position: "asc"
-        }
+          position: "asc",
+        },
       },
       chapters: {
         orderBy: {
-          position: "asc"
-        }
-      }
+          position: "asc",
+        },
+      },
     },
   });
 
@@ -53,7 +56,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
     course.price,
     course.imageUrl,
     course.categoryId,
-    course.chapters.some((chapter) => chapter.isPublished)
+    course.chapters.some((chapter) => chapter.isPublished),
   ];
 
   const totalFields = requiredFields.length;
@@ -63,17 +66,19 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
     <div className="grid md:grid-cols-4 gap-4">
       <div className="border-r border-gray md:col-span-1 w-full">
         <h1 className="text-2xl">Complete Your Course</h1>
-        <div className="flex items-center text-sky-400 space-x-2">
+        <div className="flex items-center text-slate-500 space-x-2 hover:text-black">
           <BackButton />
           <p className="">{course.title}</p>
         </div>
         <p>Completed {`(${completedFields}/${totalFields})`} </p>
       </div>
       <div className="col-span-3">
-        <div className="flex justify-between ">
-          <h1 className="text-2xl mb-5">Course Requirements</h1>
-          <Button variant="ghost">Publish</Button>
-        </div>
+        <RequirementsHeader
+          initialData={course}
+          // userId={userId}
+          // categories={categories}
+          params={params}
+        />
         <CourseRequirements
           initialData={course}
           userId={userId}

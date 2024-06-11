@@ -33,7 +33,7 @@ export async function PATCH(
       data: value
     })
 
-    
+     
     return NextResponse.json(updateChapter)
   } catch (error) {
     console.log("[INTERNAL_SERVER_ERR]", error)

@@ -6,20 +6,34 @@ export async function PATCH(
   req: Request,
   { params }: { params: { courseId: string } }
 ) {
-  const value = await req.json();
+  console.log("anjay")
   const { userId } = auth();
   const { courseId } = params;
+  const value = await req.json();
+
+  console.log("value", value)
   
+  if (!userId) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+  }
+
+  const courseOwner = await db.course.findUnique({
+    where: {
+      id: courseId,
+      userId: userId,
+    }
+  });
+
+  if (!courseOwner) {
+    return NextResponse.json({ message: "You're not the owner of this course." }, { status: 401 })
+  }
+    
   const course = await db.course.update({
     where: {
       id: courseId,
     },
     data: value
   });
-
-  if(!userId) {
-    throw new Error("Unauthorized");
-  }
 
   return NextResponse.json(course)
 }

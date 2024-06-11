@@ -89,7 +89,6 @@ const ChapterForm = ({ initialData, userId, params }: ChapterFormProps) => {
   const onSubmit = async (
     value: z.infer<typeof formSchemaA> | z.infer<typeof formSchemaB>
   ) => {
-    console.log("v", value);
     try {
       await axios.post(`/api/courses/${initialData.id}/chapters`, value);
       value.creationState === "chapter"
