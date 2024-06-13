@@ -38,6 +38,7 @@ const CreateCoursePage = () => {
   const onSubmit = async (value: z.infer<typeof formSchema>) => {
     try {
       const response = await axios.post("/api/courses", value);
+      router.refresh()
       router.push(`/teach/course/${response.data.id}`);
     } catch {
       console.log("Something went wrong");
@@ -77,6 +78,7 @@ const CreateCoursePage = () => {
               <Button
                 variant="ghost"
                 onClick={() => router.push("/teach/course")}
+                type="button"
               >
                 Cancel
               </Button>

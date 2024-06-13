@@ -21,3 +21,21 @@ export async function POST(
 
   return NextResponse.json(course)
 }
+
+export async function GET(
+  req: Request
+) {
+  const { userId } = auth();
+
+  if(!userId) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+  }
+
+  const course = await db.course.findMany({
+    where: {
+      isPublished: true
+    }
+  });
+
+  return NextResponse.json(course)
+}

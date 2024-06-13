@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,18 +9,17 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-
 const formSchema = z.object({
   isPublished: z.boolean(),
 });
 
 interface RequirementsHeaderProps {
-  initialData: Course,
-  params: { courseId: string }
+  initialData: Course;
+  params: { courseId: string };
 }
 const RequirementsHeader = ({
   initialData,
-  params
+  params,
 }: RequirementsHeaderProps) => {
   const router = useRouter();
 
@@ -30,9 +29,11 @@ const RequirementsHeader = ({
 
   const onSubmit = async (value: z.infer<typeof formSchema>) => {
     try {
-      console.log(value)
+      console.log(value);
       await axios.patch(`/api/courses/${params.courseId}`, value);
-      value.isPublished ? toast.success("Course successfuly published!") : toast.success("Course successfuly unpublished.")
+      value.isPublished
+        ? toast.success("Course successfuly published!")
+        : toast.success("Course successfuly unpublished.");
       router.refresh();
     } catch (error) {
       toast.error("Something went wrong...");
@@ -41,7 +42,7 @@ const RequirementsHeader = ({
 
   return (
     <div className="flex justify-between">
-      <h1 className="text-2xl mb-5">
+      <h1 className="text-2xl mb-5 pointer-events-none">
         Course Requirements
         <span className="text-xs ml-6 p-2 text-slate-500 bg-sky-100 rounded-xl">
           {!initialData.isPublished ? "unpublished" : "published"}
