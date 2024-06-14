@@ -331,7 +331,7 @@ const ChapterForm = ({ initialData, userId, params }: ChapterFormProps) => {
                                   >
                                     <div
                                       key={chapter.id}
-                                      className="flex w-full items-center space-x-2 w-full ml-1"
+                                      className="flex items-center space-x-2 w-full ml-1"
                                     >
                                       <p>{chapter.position}.</p>
                                       <CirclePlay className="w-4 h-4" />

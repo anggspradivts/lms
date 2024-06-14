@@ -17,7 +17,7 @@ export default function RootLayout({
       <html lang="en">
         <body>
           <Navbar />
-          <main className="p-4">
+          <main className="">
             <Toaster position="top-right" reverseOrder={false} />
             {children}
           </main>
