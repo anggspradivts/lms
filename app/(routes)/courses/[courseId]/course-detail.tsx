@@ -1,9 +1,13 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Chapter, ChapterFolder, Course, Purchase } from "@prisma/client";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight, X } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import EnrollSectionPage from "./_components/enroll-section";
+import DescriptionSectionPage from "./_components/description-section";
 
 interface CourseDetailPageProps {
   initialData: Course & {
@@ -19,13 +23,11 @@ const CourseDetailPage = ({
   const [coursePreview, setCoursePreview] = useState<string | null>(null);
   const [expandedFolderId, setExpandedFolderId] = useState<string | null>(null);
 
+  const router = useRouter();
+
   const findChapterInFolder = initialData.chapters.filter(
     (chapter) => chapter.chapterFolderId === expandedFolderId
   );
-
-  useEffect(() => {
-    initialData.imageUrl && setCoursePreview(initialData.imageUrl);
-  }, []);
 
   const handleFolderClick = (folderId: string) => {
     setExpandedFolderId((prevFolderId) =>
@@ -34,38 +36,36 @@ const CourseDetailPage = ({
   };
 
   const handleCoursePreview = (url: string | null) => {
-    setCoursePreview(url)
-    console.log("ppp", url)
-  }
+    setCoursePreview(url);
+  };
 
   return (
     <div className="">
       <div className="course-header p-5 bg-slate-300 text-xl font-bold">
         <p>{initialData.title}</p>
       </div>
-      <div className="grid md:grid-cols-3 p-4 gap-x-3">
-        <div className="overflow-y-scroll max-h-[600px] col-span-2">
-          <div className="h-[1000px]">
+      <div className="grid md:grid-cols-3 p-4 gap-x-10">
+        <div className="md:overflow-y-scroll md:max-h-[600px] md:col-span-2 p-2">
+          <div>
             <div className="img-sec flex justify-center py-10">
-              {coursePreview ? (
+              {coursePreview !== null && coursePreview !== undefined ? (
                 <div className="video-container">
-                  <video controls className="w-full h-auto">
+                  <video controls className="w-[700px] h-auto">
                     <source src={coursePreview} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
+                  <div>{/* <p>{}</p> */}</div>
                 </div>
               ) : (
-                <>
-                  {initialData.imageUrl && (
-                    <Image
-                      src={initialData.imageUrl}
-                      className=""
-                      width={500}
-                      height={700}
-                      alt="course image"
-                    />
-                  )}
-                </>
+                initialData.imageUrl && (
+                  <Image
+                    src={initialData.imageUrl}
+                    className=""
+                    width={700}
+                    height={500}
+                    alt="course image"
+                  />
+                )
               )}
             </div>
             <div className="chapter-sec bg-slate-200">
@@ -93,15 +93,13 @@ const CourseDetailPage = ({
                         <div className="pl-6 space-y-2 ">
                           {findChapterInFolder.map((chapter, index) =>
                             chapter.isFree ? (
-                              <div
-                                key={chapter.id}
-                                onClick={() =>
-                                  handleCoursePreview(chapter.videoUrl)
-                                }
-                              >
+                              <div key={chapter.id}>
                                 <p
                                   key={chapter.id}
                                   className="border-b border-black text-sky-500"
+                                  onClick={() =>
+                                    handleCoursePreview(chapter.videoUrl)
+                                  }
                                 >
                                   {index + 1}. {chapter.title}
                                 </p>
@@ -126,8 +124,9 @@ const CourseDetailPage = ({
               </div>
             </div>
           </div>
+          <DescriptionSectionPage initialData={initialData} />
         </div>
-        <div className="col-span-1">enroll section</div>
+        <EnrollSectionPage initialData={initialData} checkBought={checkBought}/>
       </div>
     </div>
   );

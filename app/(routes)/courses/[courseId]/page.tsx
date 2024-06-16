@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import CourseDetailPage from "./course-detail";
 import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 interface PageProps {
   params: { courseId: string };
@@ -32,14 +32,10 @@ const Page = async ({ params }: PageProps) => {
   });
 
   if (!course) {
-    return (
-      <div>
-        No course was found
-      </div>
-    )
+    notFound();
   }
 
-  //find the course if it is bought or not
+  //check the course if it is bought or not by the userID
   const checkBought = await db.purchase.findFirst({
     where: {
       courseId: params.courseId,
