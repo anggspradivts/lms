@@ -1,6 +1,7 @@
-"use client"
+"use client";
+import { cn } from "@/lib/utils";
 import { Chapter, ChapterFolder, Course } from "@prisma/client";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight, Info } from "lucide-react";
 import { useState } from "react";
 
 interface EnrolledIdPageProps {
@@ -12,14 +13,33 @@ interface EnrolledIdPageProps {
 }
 const EnrolledIdPage = ({ params, initialData }: EnrolledIdPageProps) => {
   const [expandedFolderId, setExpandedFolderId] = useState<string | null>("");
-  const [coursePreview, setCoursePreview] = useState<string | null>("");
+  const [chapterDuration, setChapterDuration] = useState<number | null>(null);
+  const [coursePreview, setCoursePreview] = useState<{
+    url: string;
+    title: string;
+    description: string;
+  } | null>(null);
 
   const findChapterInFolder = initialData.chapters.filter(
-    (chapter) => chapter.id === expandedFolderId
+    (chapter) => chapter.chapterFolderId === expandedFolderId
   );
 
-  const handleCoursePreview = (url: string | null) => {
-    setCoursePreview(url);
+  const handleLoadedMetadata = (event: React.SyntheticEvent<HTMLVideoElement>) => {
+    const videoElement = event.currentTarget;
+    const duration = Math.floor(videoElement.duration);
+    setChapterDuration(duration)
+  }
+
+  const handleCoursePreview = (
+    url: string | null,
+    title: string | null,
+    description: string | null
+  ) => {
+    if (url && title && description) {
+      setCoursePreview({ url, title, description });
+    } else {
+      setCoursePreview(null); // Handle the case where URL is null
+    }
   };
 
   const handleFolderClick = (folderId: string) => {
@@ -28,25 +48,40 @@ const EnrolledIdPage = ({ params, initialData }: EnrolledIdPageProps) => {
 
   return (
     <div>
-      <div className="grid md:grid-cols-3 p-4 gap-x-10">
+      <div className="p-3 bg-black text-white">{initialData.title}</div>
+      <div className="grid md:grid-cols-3 p-4 gap-x-10 md:min-h-[600px] md:max-h-[600px]">
         <div className="md:overflow-y-scroll md:max-h-[600px] md:col-span-2 p-2">
-          <div>
-            <div className="img-sec flex justify-center py-10">
-              {coursePreview ? (
-                <div className="video-container">
-                  <video controls className="w-[700px] h-auto">
-                    <source src={coursePreview} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                  <div>{/* <p>{}</p> */}</div>
+          <div className="img-sec flex justify-center ">
+            {coursePreview ? (
+              <div className="course-container max-w-[700px]">
+                <div className="flex items-center justify-between p-3 bg-black text-white ">
+                  <p className="font-bold text-xl">{coursePreview.title}</p>
+                  <p className="text-xs">{chapterDuration}</p>
                 </div>
-              ) : (
-                <div>No course video available</div>
-              )}
-            </div>
+                <video controls className="w-auto h-auto" onLoadedMetadata={handleLoadedMetadata}>
+                  <source src={coursePreview.url} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+                <div className="py-5">
+                  <div className="flex py-4 md:pt-16 space-x-4 items-center text-sky-500">
+                    <p className="text-xl font-bold ">About this Chapter</p>{" "}
+                    <Info />
+                  </div>
+                  <div>
+                    <p>{coursePreview.description}</p>
+                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                    Pariatur facere mollitia voluptate, quis nihil modi. Nobis
+                    veritatis error quidem! Quaerat, eius et amet vero
+                    blanditiis adipisci sed deserunt saepe non?
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div>No course video available</div>
+            )}
           </div>
         </div>
-        <div className="cols-span-1">
+        <div className="md:cols-span-1 md:overflow-y-scroll md:max-h-[600px]">
           <div className="chapter-sec bg-slate-200">
             <p className="text-xl font-bold p-3 bg-black text-white">
               Course Module
@@ -55,6 +90,7 @@ const EnrolledIdPage = ({ params, initialData }: EnrolledIdPageProps) => {
               {initialData.chaptersFolders.map((folder, index) => (
                 <div key={folder.id}>
                   <div
+                    key={folder.id}
                     role="button"
                     tabIndex={0}
                     onClick={() => handleFolderClick(folder.id)}
@@ -74,9 +110,17 @@ const EnrolledIdPage = ({ params, initialData }: EnrolledIdPageProps) => {
                           <div key={chapter.id}>
                             <p
                               key={chapter.id}
-                              className="border-b border-black text-sky-500"
+                              className={cn(
+                                "border-b border-black ",
+                                chapter.title === coursePreview?.title &&
+                                  "text-sky-500"
+                              )}
                               onClick={() =>
-                                handleCoursePreview(chapter.videoUrl)
+                                handleCoursePreview(
+                                  chapter.videoUrl,
+                                  chapter.title,
+                                  chapter.description
+                                )
                               }
                             >
                               {index + 1}. {chapter.title}
