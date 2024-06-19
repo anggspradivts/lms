@@ -1,5 +1,5 @@
 import { auth } from "@clerk/nextjs/server";
-import EnrolledIdPage from "./EnrolledPage";
+import EnrolledIdPage from "./EnrolledIdPage";
 import { notFound, redirect, useRouter } from "next/navigation";
 import { db } from "@/lib/db";
 
@@ -14,16 +14,16 @@ const LecturePage = async ({ params }: LecturePageProps) => {
   }
 
   //check the course if it is bought or not by the userID
-  const checkBought = await db.purchase.findUnique({
+  const checkBought = await db.purchase.findFirst({
     where: {
-      id: params.enrolledId,
+      courseId: params.enrolledId,
       userId: userId,
     },
   });
 
   if (!checkBought) {
     throw new Error("You have not purchased this course");
-  }
+  };
 
   const course = await db.course.findUnique({
     where: {
@@ -47,11 +47,11 @@ const LecturePage = async ({ params }: LecturePageProps) => {
     where: {
       userId: userId
     }
-  })
+  });
 
   if (!course) {
     notFound();
-  }
+  };
 
   return (
     <div>
