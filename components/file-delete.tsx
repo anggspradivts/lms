@@ -1,5 +1,5 @@
 "use server"
-import { utapi } from "@/lib/uplooadthing"
+import { utapi } from "@/lib/uploadthing"
 import { auth } from "@clerk/nextjs/server"
 import { NextResponse } from "next/server";
 

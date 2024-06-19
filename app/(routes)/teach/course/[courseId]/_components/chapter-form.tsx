@@ -48,7 +48,6 @@ const ChapterForm = ({ initialData, userId, params }: ChapterFormProps) => {
   const [isChapterShow, setIsChapterShow] = useState<string | null>(null);
 
   const router = useRouter();
-  const { courseId } = useParams();
 
   //filter chapter based on chapterFolderId
   const chapterOnChapterFolderId = initialData.chapters.filter(
