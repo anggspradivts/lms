@@ -181,7 +181,12 @@ const ChapterForm = ({ initialData, userId, params }: ChapterFormProps) => {
                   />
                 </div>
                 <div className="mb-3 space-y-2">
-                  <p>Chapter description <span className="text-sm text-slate-500">{"(optional)"}</span></p>
+                  <p>
+                    Chapter description{" "}
+                    <span className="text-sm text-slate-500">
+                      {"(optional)"}
+                    </span>
+                  </p>
                   <FormField
                     control={formChapter.control}
                     name="description"
@@ -327,12 +332,10 @@ const ChapterForm = ({ initialData, userId, params }: ChapterFormProps) => {
                               chapterOnChapterFolderId.length > 0 ? (
                                 chapterOnChapterFolderId.map((chapter) => (
                                   <Link
+                                    key={chapter.id}
                                     href={`/teach/course/${params.courseId}/chapters/${chapter.id}`}
                                   >
-                                    <div
-                                      key={chapter.id}
-                                      className="flex items-center space-x-2 w-full ml-1"
-                                    >
+                                    <div className="flex items-center space-x-2 w-full ml-1">
                                       <p>{chapter.position}.</p>
                                       <CirclePlay className="w-4 h-4" />
                                       <p className="mr-20 font-semibold">
@@ -374,20 +377,6 @@ const ChapterForm = ({ initialData, userId, params }: ChapterFormProps) => {
           ) : (
             <div>No folder yet...</div>
           )}
-
-          {/* {initialData.chapters.length > 0 ? (
-            <div className="space-y-2">
-              {initialData.chapters.map((chapter) => (
-                <div key={chapter.id} className="bg-slate-200 p-1 rounded-md">
-                  {chapter.title}
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div>
-              <p>{null}</p>
-            </div>
-          )} */}
         </div>
       )}
     </div>

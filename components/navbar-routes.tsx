@@ -25,6 +25,8 @@ const NavbarRoutes = () => {
               <p>Teach</p>
             </Link>
             <Link href="/category">Category</Link>
+            <Link href="/courses/enrolled">My Learning</Link>
+
             <ShoppingCart className="h-5 w-5" />
           </>
         ) : (

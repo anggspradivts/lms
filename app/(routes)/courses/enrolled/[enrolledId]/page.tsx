@@ -10,38 +10,44 @@ const LecturePage = async ({ params }: LecturePageProps) => {
   const { userId } = auth();
 
   if (!userId) {
-    redirect("/")
+    redirect("/");
   }
 
   //check the course if it is bought or not by the userID
   const checkBought = await db.purchase.findUnique({
     where: {
       id: params.enrolledId,
-      userId: userId
+      userId: userId,
     },
   });
 
   if (!checkBought) {
-    throw new Error("You have not purchased this course")
+    throw new Error("You have not purchased this course");
   }
 
   const course = await db.course.findUnique({
     where: {
-      id: checkBought.courseId, 
+      id: checkBought.courseId,
     },
     include: {
       chapters: {
         orderBy: {
-          createdAt: "asc"
-        }
+          createdAt: "asc",
+        },
       },
       chaptersFolders: {
         orderBy: {
-          position: "asc"
-        }
-      }
-    }
+          position: "asc",
+        },
+      },
+    },
   });
+
+  const userProgress = await db.userProgress.findMany({
+    where: {
+      userId: userId
+    }
+  })
 
   if (!course) {
     notFound();
@@ -49,7 +55,7 @@ const LecturePage = async ({ params }: LecturePageProps) => {
 
   return (
     <div>
-      <EnrolledIdPage initialData={course} params={params.enrolledId}/>
+      <EnrolledIdPage initialData={course} params={params.enrolledId} userProgress={userProgress}/>
     </div>
   );
 };
