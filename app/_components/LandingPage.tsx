@@ -37,7 +37,7 @@ const LandingPage = () => {
           return (
             <div
               key={index}
-              className="border border-slate-300 min-w-[400px] md:w-auto rounded-xl"
+              className="border border-slate-300 min-w-[300px] md:w-auto rounded-xl"
             >
               <div className="flex border-b border-slate-300 p-2 space-x-4">
                 <CircleUser />
@@ -68,7 +68,7 @@ const LandingPage = () => {
           return (
             <div
               key={index}
-              className="border border-slate-300 min-w-[400px] md:w-auto rounded-xl"
+              className="border border-slate-300 min-w-[300px] md:w-auto rounded-xl"
             >
               <div className="p-2 flex justify-center items-center h-[150px] bg-slate-300">
                 < ImageIcon/>
