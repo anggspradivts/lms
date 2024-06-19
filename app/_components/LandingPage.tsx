@@ -44,10 +44,10 @@ const LandingPage = () => {
                 <p>John Doe</p>
               </div>
               <p className="p-2">
-                "This platform has completely transformed my learning
+                This platform has completely transformed my learning
                 experience. The courses are well-structured, and the instructors
                 are incredibly knowledgeable. I've gained so many new skills
-                that have already helped me in my career."
+                that have already helped me in my career
               </p>
             </div>
           );
