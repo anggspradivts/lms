@@ -18,7 +18,6 @@ import {
   ChevronRight,
   CirclePlay,
   Folder,
-  Pencil,
   Plus,
   PlusCircle,
   Trash2,

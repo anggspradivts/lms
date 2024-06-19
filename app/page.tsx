@@ -75,7 +75,7 @@ export default async function Home() {
         <div className="grid grid-cols-2 md:grid-cols-3 w-5/6 gap-10 text-center text-xl md:text-4xl">
           {categories.map((cate) => {
             return (
-              <Link href={`/${cate.name}`}>
+              <Link key={cate.id} href={`/${cate.name}`}>
                 <div className="h-[200px] flex items-center justify-center bg-slate-100 rounded-lg transition-all duration-300 hover:scale-95  ">
                   <p>{cate.name}</p>
                 </div>
