@@ -18,7 +18,7 @@ const LoaderButton = ({
         onClick()
       }}
     >
-      {!isLoading ? "Go to lecture" : <Loader2 className="animate-spin" />}
+      {!isLoading ? condition : <Loader2 className="animate-spin" />}
     </Button>
   );
 };

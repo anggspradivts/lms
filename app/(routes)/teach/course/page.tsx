@@ -1,14 +1,17 @@
+import LoaderButton from "@/components/loader-btn";
 import { Button } from "@/components/ui/button";
 import { db } from "@/lib/db";
 import { cn } from "@/lib/utils";
 import { auth } from "@clerk/nextjs/server";
-import { ImageIcon } from "lucide-react";
+import { ImageIcon, Loader } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 
 const CoursePage = async () => {
+
+
   const { userId } = auth();
   if (!userId) {
     redirect("/");
@@ -39,7 +42,7 @@ const CoursePage = async () => {
         <div className="flex justify-between">
           <button>Sorted by created at</button>
           <Link href="/teach/course/create">
-            <Button> Create Course </Button>
+            <Button>Create Course</Button>
           </Link>
         </div>
       </div>
