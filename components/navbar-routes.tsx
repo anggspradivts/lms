@@ -11,7 +11,7 @@ import { Input } from "./ui/input";
 
 const NavbarRoutes = () => {
   const pathname = usePathname();
-  const isTeacherPage = pathname?.startsWith("/teach");
+  const isTeacherPage = pathname?.startsWith("/teach/course");
 
   return (
     <div>
