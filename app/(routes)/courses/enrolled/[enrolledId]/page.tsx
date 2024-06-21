@@ -34,6 +34,13 @@ const LecturePage = async ({ params }: LecturePageProps) => {
         orderBy: {
           createdAt: "asc",
         },
+        include: {
+          userProgress: {
+            orderBy: {
+              createdAt: "asc"
+            }
+          }
+        }
       },
       chaptersFolders: {
         orderBy: {

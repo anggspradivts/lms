@@ -42,10 +42,11 @@ const EnrolledIdPage = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      // isCompleted: false,
       chapterId: "",
     },
   });
+
+
 
   const findChapterInFolder = initialData.chapters.filter(
     (chapter) => chapter.chapterFolderId === expandedFolderId
@@ -55,7 +56,7 @@ const EnrolledIdPage = ({
     // Initialize checkbox states based on user progress
     const initialCheckboxStates: { [key: string]: boolean } = {};
     userProgress.forEach((progress) => {
-      initialCheckboxStates[progress.chapterId] = progress.isCompleted;
+      initialCheckboxStates[progress.chapterId] = true;
     });
     setCheckboxStates(initialCheckboxStates);
   }, [userProgress]);
@@ -90,19 +91,21 @@ const EnrolledIdPage = ({
         `/api/courses/enrolled/${data.chapterId}`,
         data
       );
-      console.log(res.data);
     } catch (error) {
       toast.error("Failed chapter completion...");
     }
   };
 
+  console.log("userProgress", userProgress)
+
   const handleBoxChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     chapterId: string
   ) => {
-    const condition = event.target.checked;
+    const isChecked = event.target.checked;
+
     onSubmit({
-      isCompleted: condition,
+      isCompleted: isChecked,
       chapterId: chapterId,
     });
   };
@@ -203,9 +206,9 @@ const EnrolledIdPage = ({
                                 onChange={(event) =>
                                   handleBoxChange(event, chapter.id)
                                 }
-                                checked={
-                                  checkboxStates[chapter.id] || false
-                                }
+                                checked={userProgress.some(
+                                  (progress) => progress.chapterId === chapter.id
+                                )}
                               />
                             </form>
                           </div>

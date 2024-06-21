@@ -1,8 +1,16 @@
+"use client";
+
 import { CircleUser, ImageIcon } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const LandingPage = () => {
   const testi = [1, 2, 3];
+  const router = useRouter();
+
+  const handleRoute = (url: string) => {
+    router.push(url);
+  }
 
   return (
     <div className="p-4 md:px-20">
@@ -12,7 +20,10 @@ const LandingPage = () => {
           <p>Discover a diverse array of courses crafted by industry experts</p>
           <div className="flex gap-x-3 text-lg">
             <button className="border border-black p-5">Discover More</button>
-            <button className="bg-sky-500 p-5 text-white">
+            <button
+              onClick={() => handleRoute("/courses")}
+              className="bg-sky-500 p-5 text-white"
+            >
               Start Learning
             </button>
           </div>
@@ -27,7 +38,10 @@ const LandingPage = () => {
         </div>
         <div className="flex flex-col justify-center items-center gap-y-7">
           <p className="text-4xl">Enhance Your Skills</p>
-          <button className="bg-slate-500 p-3 text-white">
+          <button
+            onClick={() => handleRoute("/courses")}
+            className="bg-slate-500 p-3 text-white"
+          >
             Start Learning
           </button>
         </div>
@@ -44,9 +58,9 @@ const LandingPage = () => {
                 <p>John Doe</p>
               </div>
               <p className="p-2">
-                This platform has completely transformed my learning
-                experience. The courses are well-structured, and the instructors
-                are incredibly knowledgeable. I&apos;ve gained so many new skills
+                This platform has completely transformed my learning experience.
+                The courses are well-structured, and the instructors are
+                incredibly knowledgeable. I&apos;ve gained so many new skills
                 that have already helped me in my career
               </p>
             </div>
@@ -57,7 +71,12 @@ const LandingPage = () => {
         <div className="flex flex-col justify-center items-center gap-y-4 text-start">
           <p className="text-4xl">Share Your Skills</p>
           <p>be a mentor, and join our Community</p>
-          <button className="bg-slate-500 p-3 text-white">Start Teach</button>
+          <button
+            onClick={() => handleRoute("/teach")}
+            className="bg-slate-500 p-3 text-white"
+          >
+            Start Teach
+          </button>
         </div>
         <div className="hidden md:flex items-center justify-center">
           Image section
@@ -71,11 +90,9 @@ const LandingPage = () => {
               className="border border-slate-300 min-w-[300px] md:w-auto rounded-xl"
             >
               <div className="p-2 flex justify-center items-center h-[150px] bg-slate-300">
-                < ImageIcon/>
+                <ImageIcon />
               </div>
-              <p className="p-2">
-                Course Title
-              </p>
+              <p className="p-2">Course Title</p>
             </div>
           );
         })}
