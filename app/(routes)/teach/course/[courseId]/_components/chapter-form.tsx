@@ -4,7 +4,7 @@ import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Chapter, ChapterFolder, Course } from "@prisma/client";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -309,7 +309,9 @@ const ChapterForm = ({ initialData, userId, params }: ChapterFormProps) => {
                       )}
                     >
                       <button
-                        onClick={() => setIsChapterShow(cf.id)}
+                        onClick={() => setIsChapterShow((prev) => (
+                          prev === cf.id ? null : cf.id
+                        ))}
                         className="w-full"
                       >
                         <div className="flex items-center">

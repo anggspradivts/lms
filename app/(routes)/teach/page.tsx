@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
 const TeachPage = () => {
@@ -8,7 +7,7 @@ const TeachPage = () => {
     router.push(url);
   };
   return (
-    <div className="px-20">
+    <div className="md:px-20">
       <div className="grid md:grid-cols-2 h-[500px]">
         <div className="flex flex-col justify-center items-start gap-y-7">
           <p className="text-6xl">Join Our Community</p>

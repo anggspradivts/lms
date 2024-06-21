@@ -8,6 +8,7 @@ import { Course } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   isPublished: z.boolean(),
@@ -55,30 +56,30 @@ const RequirementsHeader = ({
             name="isPublished"
             render={({ field }) => (
               <FormItem>
-                {!initialData.isPublished && (
-                  <Button
-                    variant="ghost"
-                    type="submit"
-                    className="bg-transparent"
-                    disabled={form.formState.isSubmitting}
-                    onClick={() => {
-                      form.setValue("isPublished", true);
-                    }}
-                  >
-                    Publish
-                  </Button>
-                )}
                 {initialData.isPublished && (
                   <Button
                     variant="ghost"
                     type="submit"
-                    className="bg-transparent"
+                    className="bg-red-600 text-white"
                     disabled={form.formState.isSubmitting}
                     onClick={() => {
                       form.setValue("isPublished", false);
                     }}
                   >
                     Unpublish
+                  </Button>
+                )}
+                {!initialData.isPublished && (
+                  <Button
+                    variant="ghost"
+                    type="submit"
+                    className="bg-sky-500 text-white"
+                    disabled={form.formState.isSubmitting}
+                    onClick={() => {
+                      form.setValue("isPublished", true);
+                    }}
+                  >
+                    Publish
                   </Button>
                 )}
               </FormItem>

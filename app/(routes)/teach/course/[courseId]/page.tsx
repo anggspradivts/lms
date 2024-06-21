@@ -65,7 +65,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const completedFields = requiredFields.filter(Boolean).length;
 
   return (
-    <div className="grid md:grid-cols-4 gap-4">
+    <div className="grid md:grid-cols-4 gap-4 p-4">
       <div className="border-r border-gray md:col-span-1 w-full">
         <CourseSidebar
           initialData={course}
