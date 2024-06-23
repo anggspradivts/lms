@@ -73,7 +73,7 @@ const NavbarRoutes = () => {
             <Link href="/teach">
               <p>Teach</p>
             </Link>
-            <Link href="/category">Category</Link>
+            {/* <Link href="/category">Category</Link> */}
             <Link href="/courses/enrolled">My Learning</Link>
 
             <ShoppingCart className="h-5 w-5" />
@@ -99,12 +99,13 @@ const NavbarRoutes = () => {
                 name="search"
                 value={keyword}
                 onChange={handleChange}
+                placeholder="search courses..."
               />
               <SearchIcon className="absolute top-6 ml-2" />
             </div>
           )}
           {container && (
-            <div className="w-[400px] h-[100px] max-h-[300px] bg-white absolute top-20 right-5 p-3 rounded-lg overflow-y-scroll space-y-1">
+            <div className="w-[400px] h-[100px] max-h-[300px] bg-slate-200 absolute top-20 right-5 p-3 rounded-lg overflow-y-scroll space-y-1">
               {course.map((course) => (
                 <div
                   key={course.id}

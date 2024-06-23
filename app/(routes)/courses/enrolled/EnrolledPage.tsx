@@ -1,3 +1,4 @@
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Course, Purchase } from "@prisma/client";
 import { ImageIcon, LoaderCircle } from "lucide-react";
@@ -10,8 +11,16 @@ interface EnrolledPageProps {
 const EnrolledPage = ({ initialData }: EnrolledPageProps) => {
 
   return (
-    <div className="p-4">
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-5">
+    <div className="">
+      <header className="bg-slate-300 px-20 pt-20 pb-5">
+        <h1 className="text-3xl md:text-6xl font-bold">My Learning</h1>
+      </header>
+      <div className="flex justify-end items-center px-20">
+        <div className="py-2">
+          <Input type="search" placeholder="search on learning..."/>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-5 px-20">
         {initialData && initialData.length > 0 ? (
           initialData.map((course, index) => (
             <Link key={course.id} href={`/courses/enrolled/${course.id}`}>
@@ -36,13 +45,6 @@ const EnrolledPage = ({ initialData }: EnrolledPageProps) => {
                       <ImageIcon className="" />
                     </>
                   )}
-                  {/* <div className="absolute top-0 right-0 m-1 p-1 px-2 rounded-2xl bg-slate-200 text-slate-600">
-                  {course.isPublished ? (
-                    <p className="text-xs">published</p>
-                  ) : (
-                    <p className="text-xs">unpublished</p>
-                  )}
-                </div> */}
                 </div>
                 <div className="h-1/6 flex items-center bg-slate-200 p-1">
                   <p className="w-full h-full">

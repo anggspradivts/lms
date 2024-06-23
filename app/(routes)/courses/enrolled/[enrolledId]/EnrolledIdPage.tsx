@@ -46,8 +46,6 @@ const EnrolledIdPage = ({
     },
   });
 
-
-
   const findChapterInFolder = initialData.chapters.filter(
     (chapter) => chapter.chapterFolderId === expandedFolderId
   );
@@ -103,6 +101,11 @@ const EnrolledIdPage = ({
     chapterId: string
   ) => {
     const isChecked = event.target.checked;
+
+    setCheckboxStates((prev) => ({
+      ...prev,
+      [chapterId]: isChecked,
+    }));
 
     onSubmit({
       isCompleted: isChecked,
@@ -206,9 +209,7 @@ const EnrolledIdPage = ({
                                 onChange={(event) =>
                                   handleBoxChange(event, chapter.id)
                                 }
-                                checked={userProgress.some(
-                                  (progress) => progress.chapterId === chapter.id
-                                )}
+                                checked={checkboxStates[chapter.id] || false}
                               />
                             </form>
                           </div>

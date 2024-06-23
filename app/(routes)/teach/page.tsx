@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 const TeachPage = () => {
@@ -7,7 +8,7 @@ const TeachPage = () => {
     router.push(url);
   };
   return (
-    <div className="md:px-20">
+    <div className="md:px-20 md:py-20">
       <div className="grid md:grid-cols-2 h-[500px]">
         <div className="flex flex-col justify-center items-start gap-y-7">
           <p className="text-6xl">Join Our Community</p>
@@ -23,7 +24,12 @@ const TeachPage = () => {
           </div>
         </div>
         <div className="hidden md:flex items-center justify-center">
-          Image section
+          <Image
+            src="/teach-landingpage.png"
+            height={600}
+            width={600}
+            alt="learning-ilustration"
+          />
         </div>
       </div>
     </div>

@@ -29,7 +29,7 @@ const MobileSearch = () => {
         const res = await axios.get("/api/search", { params: { q: keyword } });
         const data = res.data;
         setCourse(data);
-        if (!keyword) {
+      if (!keyword) {
           setCourse([]);
         }
       } catch (error) {
