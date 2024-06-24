@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import EnrollSectionPage from "./_components/enroll-section";
 import DescriptionSectionPage from "./_components/description-section";
+import toast from "react-hot-toast";
 
 interface CourseDetailPageProps {
   initialData: Course & {
@@ -22,6 +23,7 @@ const CourseDetailPage = ({
 }: CourseDetailPageProps) => {
   const [coursePreview, setCoursePreview] = useState<string | null>(null);
   const [expandedFolderId, setExpandedFolderId] = useState<string | null>(null);
+  const [gotoLecture, setGotoLecture] = useState(false)
 
   const router = useRouter();
 
@@ -97,9 +99,10 @@ const CourseDetailPage = ({
                                 <p
                                   key={chapter.id}
                                   className="border-b border-black text-sky-500"
-                                  onClick={() =>
-                                    handleCoursePreview(chapter.videoUrl)
-                                  }
+                                  onClick={() => {
+                                    handleCoursePreview(chapter.videoUrl);
+                                    setGotoLecture(true)
+                                  }}
                                 >
                                   {index + 1}. {chapter.title}
                                 </p>
@@ -108,6 +111,7 @@ const CourseDetailPage = ({
                               <p
                                 key={chapter.id}
                                 className="border-b border-black"
+                                onClick={() => toast.error("Go to lecture")}
                               >
                                 {index + 1}. {chapter.title}
                               </p>

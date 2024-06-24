@@ -37,17 +37,16 @@ const CoursePage = async () => {
 
   return (
     <div>
-      <div className="header  mb-3">
-        <p className="text-xl font-bold">Created Courses</p>
-        <div className="flex justify-between">
-          <button>Sorted by created at</button>
+      <div className="header px-20 pt-20 pb-5 bg-slate-300">
+        <p className="text-3xl md:text-5xl font-bold">Created Courses</p>
+        <div className="flex justify-center md:justify-end mt-4">
           <Link href="/teach/course/create">
             <Button>Create Course</Button>
           </Link>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-5 px-20">
         {course.map((course, index) => {
           return (
             <Link

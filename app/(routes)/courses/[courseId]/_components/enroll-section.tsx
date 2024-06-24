@@ -1,5 +1,6 @@
 import LoaderButton from "@/components/loader-btn";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { Course, Purchase } from "@prisma/client";
 import { Loader2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -9,13 +10,17 @@ interface EnrollSectionPage {
   initialData: Course;
   checkBought: Purchase | null;
 }
-const EnrollSectionPage = ({ initialData, checkBought }: EnrollSectionPage) => {
+const EnrollSectionPage = ({
+  initialData,
+  checkBought,
+}: EnrollSectionPage) => {
   const router = useRouter();
   const [showEnroll, setShowEnroll] = useState(false);
 
   const gotoLecture = () => {
     router.push(`/courses/enrolled/${checkBought?.id}`);
   };
+
 
   return (
     <>
@@ -43,7 +48,11 @@ const EnrollSectionPage = ({ initialData, checkBought }: EnrollSectionPage) => {
             <div className="p-4">
               <div className="mt-10 space-y-5">
                 <p className="text-3xl font-bold">${initialData.price}</p>
-                <Button onClick={() => setShowEnroll(true)}>Enroll</Button>
+                <Button
+                  onClick={() => setShowEnroll(true)}
+                >
+                  Enroll
+                </Button>
               </div>
             </div>
           </div>

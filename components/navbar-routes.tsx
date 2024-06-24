@@ -1,6 +1,12 @@
 "use client";
 import { UserButton } from "@clerk/nextjs";
-import { Loader, Loader2, LogOutIcon, SearchIcon, ShoppingCart } from "lucide-react";
+import {
+  Loader,
+  Loader2,
+  LogOutIcon,
+  SearchIcon,
+  ShoppingCart,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Input } from "./ui/input";
@@ -18,6 +24,7 @@ const NavbarRoutes = () => {
   const [keyword, setKeyword] = useState("");
   const [course, setCourse] = useState<Course[]>([]);
   const [container, setContainer] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
 
   const pathname = usePathname();
   const router = useRouter();
@@ -35,11 +42,14 @@ const NavbarRoutes = () => {
         const res = await axios.get("/api/search", { params: { q: keyword } });
         const data = res.data;
         setCourse(data);
+        setIsLoading(true)
         if (!keyword) {
           setCourse([]);
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false)
       }
     };
     searchData();
@@ -106,31 +116,37 @@ const NavbarRoutes = () => {
           )}
           {container && (
             <div className="w-[400px] h-[100px] max-h-[300px] bg-slate-200 absolute top-20 right-5 p-3 rounded-lg overflow-y-scroll space-y-1">
-              {course.map((course) => (
-                <div
-                  key={course.id}
-                  className="flex space-x-2 bg-slate-100 rounded-sm p-1"
-                  onClick={() => {
-                    router.push(`/courses/${course.id}`);
-                  }}
-                >
-                  <div>
-                    <Image
-                      src={course.imageUrl}
-                      className="h-auto w-auto"
-                      height={50}
-                      width={50}
-                      alt="course img"
-                    />
+              {course.length > 0 ? (
+                course.map((course) => (
+                  <div
+                    key={course.id}
+                    className="flex space-x-2 bg-slate-100 rounded-sm p-1"
+                    onClick={() => {
+                      router.push(`/courses/${course.id}`);
+                    }}
+                  >
+                    <div>
+                      <Image
+                        src={course.imageUrl}
+                        className="h-auto w-auto"
+                        height={50}
+                        width={50}
+                        alt="course img"
+                      />
+                    </div>
+                    <div>
+                      <p className="text-xs">{course.title}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xs">{course.title}</p>
-                  </div>
+                ))
+              ) : (
+                <div>
+                  <p className="text-sm">no courses found yet... type something,</p>
                 </div>
-              ))}
-              {!keyword && (
-                <div className="text-slate-600">type something...</div>
               )}
+              {/* {!keyword && (
+                <div className="text-slate-600">type something...</div>
+              )} */}
             </div>
           )}
         </div>

@@ -46,9 +46,9 @@ const CreateCoursePage = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto flex md:items-center md:justify-center h-full p-6">
-      <div>
-        <h1>Name your course</h1>
+    <div className="h-screen max-w-5xl mx-auto flex md:items-center md:justify-center ">
+      <div className="border border-slate-300 p-3 rounded-lg">
+        <p className="text-xl">Name your course</p>
         <p className="text-sm text-slate-800">
           What would you like to name your course
         </p>
