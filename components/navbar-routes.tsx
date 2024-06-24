@@ -24,7 +24,7 @@ const NavbarRoutes = () => {
   const [keyword, setKeyword] = useState("");
   const [course, setCourse] = useState<Course[]>([]);
   const [container, setContainer] = useState(false);
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   const pathname = usePathname();
   const router = useRouter();
@@ -42,17 +42,22 @@ const NavbarRoutes = () => {
         const res = await axios.get("/api/search", { params: { q: keyword } });
         const data = res.data;
         setCourse(data);
-        setIsLoading(true)
+        setIsLoading(true);
         if (!keyword) {
           setCourse([]);
         }
       } catch (error) {
         console.log("error", error);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     };
-    searchData();
+    
+    if (keyword) {
+      searchData();
+    } else {
+      setCourse([]);
+    }
   }, [keyword]);
 
   // click outside ui
@@ -141,7 +146,9 @@ const NavbarRoutes = () => {
                 ))
               ) : (
                 <div>
-                  <p className="text-sm">no courses found yet... type something,</p>
+                  <p className="text-sm">
+                    no courses found yet... type something,
+                  </p>
                 </div>
               )}
               {/* {!keyword && (

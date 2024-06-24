@@ -26,6 +26,10 @@ export async function GET(
 
     return NextResponse.json(findCourse);
   } catch (error) {
-    console.log("[ERR_SEARCH_API]", error)
+    console.log("[ERR_SEARCH_API]", error);
+    return NextResponse.json(
+      { message: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }
